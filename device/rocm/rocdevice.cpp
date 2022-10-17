@@ -1486,7 +1486,8 @@ bool Device::populateOCLDeviceConstants() {
     if (agent_profile_ == HSA_PROFILE_FULL) {
       info_.svmCapabilities_ |= CL_DEVICE_SVM_FINE_GRAIN_SYSTEM;
     }
-    if (amd::IS_HIP) {
+    //if (amd::IS_HIP) {
+    if (true) {
       // Report atomics capability based on GFX IP, control on Hawaii
       if (info_.hostUnifiedMemory_ || isa().versionMajor() >= 8) {
         info_.svmCapabilities_ |= CL_DEVICE_SVM_ATOMICS;
