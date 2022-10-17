@@ -46,6 +46,7 @@
 #endif
 #endif
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -61,6 +62,7 @@
 namespace amd {
 class Command;
 class CommandQueue;
+class HostQueue;
 class ReadMemoryCommand;
 class WriteMemoryCommand;
 class FillMemoryCommand;
@@ -1804,6 +1806,15 @@ class Device : public RuntimeObject {
 
   static std::vector<Device*>& devices() { return *devices_; }
 
+  std::vector<HostQueue*>& hostQueues() { return hostQueues_; }
+  void addHostQueue(HostQueue* queue) { hostQueues_.push_back(queue); }
+  void removeHostQueue(HostQueue* queue) {
+    hostQueues_.erase(std::remove(hostQueues_.begin(),
+                                  hostQueues_.end(), queue),
+                      hostQueues_.end());
+  }
+  Monitor& queueLock() { return queueLock_; }
+
   // P2P devices that are accessible from the current device
   std::vector<cl_device_id> p2pDevices_;
 
@@ -1912,6 +1923,9 @@ class Device : public RuntimeObject {
 #endif
 
   static std::vector<Device*>* devices_;  //!< All known devices
+
+  std::vector<HostQueue*> hostQueues_;
+  Monitor queueLock_;
 
   Monitor* vaCacheAccess_;                            //!< Lock to serialize VA caching access
   std::map<uintptr_t, device::Memory*>* vaCacheMap_;  //!< VA cache map
