@@ -2313,6 +2313,8 @@ bool Device::SetSvmAttributesInt(const void* dev_ptr, size_t count,
             //! @note: HMM should support automatic page table update with xnack enabled,
             //! but currently it doesn't and runtime explicitly enables access from all devices
             for (const auto dev : devices()) {
+              if (!dev->isOnline())
+                continue;
               // Skip null devices
               if (static_cast<Device*>(dev)->getBackendDevice().handle != 0) {
                 attr.push_back({attrib, static_cast<Device*>(dev)->getBackendDevice().handle});
@@ -2461,6 +2463,8 @@ bool Device::GetSvmAttributes(void** data, size_t* data_sizes, int* attributes,
           *reinterpret_cast<int32_t*>(data[idx]) = static_cast<int32_t>(amd::InvalidDeviceId);
           // Find device agent returned by ROCr
           for (auto& device : devices()) {
+            if (!device->isOnline())
+              continue;
             if (static_cast<Device*>(device)->getBackendDevice().handle == it.value) {
               *reinterpret_cast<uint32_t*>(data[idx]) = static_cast<uint32_t>(device->index());
             }
@@ -2494,6 +2498,8 @@ bool Device::GetSvmAttributes(void** data, size_t* data_sizes, int* attributes,
                   static_cast<int32_t>(amd::InvalidDeviceId);
                 // Find device agent returned by ROCr
                 for (auto& device : devices()) {
+                  if (!device->isOnline())
+                    continue;
                   if (static_cast<Device*>(device)->getBackendDevice().handle == it.value) {
                     reinterpret_cast<uint32_t*>(data[idx])[entry] =
                       static_cast<uint32_t>(device->index());
