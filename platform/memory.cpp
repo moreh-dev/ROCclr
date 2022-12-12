@@ -382,6 +382,7 @@ void Memory::replaceDeviceMemory(const Device* dev, device::Memory* dm) {
 }
 
 device::Memory* Memory::getDeviceMemory(const Device& dev, bool alloc) {
+  amd::ScopedLock lock(lockMemoryOps());
   device::Memory* dm = NULL;
   for (uint i = 0; i < numDevices_; ++i) {
     if (deviceMemories_[i].ref_ == &dev) {
