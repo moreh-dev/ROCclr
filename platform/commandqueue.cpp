@@ -45,12 +45,6 @@ HostQueue::HostQueue(Context& context, Device& device, cl_command_queue_properti
   if (AMD_DIRECT_DISPATCH) {
     // Initialize the queue
     thread_.Init(this);
-
-    // MOREH: MAF-5697
-    // AMD HIP runtime calls profilerAttach()
-    // since we use OpenCL + HIP, we call it in ROCclr
-    bool enable_profiling = this->properties().test(CL_QUEUE_PROFILING_ENABLE);
-    vdev()->profilerAttach(enable_profiling);
   } else {
     if (thread_.state() >= Thread::INITIALIZED) {
       ScopedLock sl(queueLock_);
