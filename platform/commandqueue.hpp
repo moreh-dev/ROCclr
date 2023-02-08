@@ -39,6 +39,8 @@
  *  the CommandQueue::loop() function.
  */
 
+class ihipStream_t;
+
 namespace amd {
 
 class HostQueue;
@@ -292,6 +294,8 @@ class HostQueue : public CommandQueue {
 
   //! Reset counter
   void ResetMarkerTsCount() { markerTsCount_ = 0; }
+
+  static int DeviceId(ihipStream_t* hStream);
 
 private:
   Command* head_;   //!< Head of the batch list
