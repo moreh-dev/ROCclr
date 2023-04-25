@@ -1210,6 +1210,8 @@ class VirtualDevice : public amd::HeapObject {
   //! Destroy this virtual device.
   virtual ~VirtualDevice() {}
 
+  virtual uint64_t GetNumCommandsInQueue() { return 0; }
+
   //! Return the physical device for this virtual device.
   const amd::Device& device() const { return device_(); }
 

@@ -1286,6 +1286,13 @@ void* VirtualGPU::allocKernArg(size_t size, size_t alignment) {
   return result;
 }
 
+uint64_t VirtualGPU::GetNumCommandsInQueue() {
+  uint64_t write = hsa_queue_load_write_index_relaxed(gpu_queue_);
+  uint64_t read = hsa_queue_load_read_index_relaxed(gpu_queue_);
+
+  return write - read;
+}
+
 // ================================================================================================
 address VirtualGPU::allocKernelArguments(size_t size, size_t alignment) {
   if (ROC_SKIP_KERNEL_ARG_COPY) {
